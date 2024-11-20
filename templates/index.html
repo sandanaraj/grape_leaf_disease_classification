@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grape Leaf Disease Classifier</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Grape Leaf Disease Classifier</h1>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" id="file-input" name="file" accept="image/*" required>
+            <button type="submit">Upload and Classify</button>
+        </form>
+        <div id="preview-container">
+            <center>
+                <h2 id="text"></h2>
+                <img id="image-preview" src="" alt="Preview will appear here" style="max-width: 100%; display: none;"/>
+            </center>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script>
+        // Display image preview
+        document.getElementById("file-input").addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            document.getElementById("result").innerHTML="";
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById("text").innerText="Result";
+                    const previewImage = document.getElementById("image-preview");
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = "block";
+
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle form submission and display results
+        document.getElementById("upload-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const fileInput = document.getElementById("file-input");
+            if (!fileInput.files.length) {
+                alert("Please select an image!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+                const response = await fetch("/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById("result").innerHTML = `
+                        <p><strong>Prediction :</strong> ${result.predicted_disease}</p>
+                        <p><strong>Probability:</strong> ${(result.probability * 100).toFixed(2)}%</p>
+                    `;
+                } else {
+                    alert(result.error || "An error occurred while processing the image.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to connect to the server.");
+            }
+        });
+    </script>
+</body>
+</html>

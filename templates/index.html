@@ -22,7 +22,6 @@
         <div id="result"></div>
     </div>
     <script>
-        // Display image preview
         document.getElementById("file-input").addEventListener("change", (event) => {
             const file = event.target.files[0];
             document.getElementById("result").innerHTML="";
@@ -39,7 +38,6 @@
             }
         });
 
-        // Handle form submission and display results
         document.getElementById("upload-form").addEventListener("submit", async (event) => {
             event.preventDefault();
 

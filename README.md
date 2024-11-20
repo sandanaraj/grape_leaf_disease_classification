@@ -25,8 +25,8 @@ Ensure you have Python installed (version 3.7 or above). You can download it fro
 ### Steps
 1. Clone this repository:
    ```bash
-   git clone https://github.com/sandanaraj/grape-leaf-classifier.git
-   cd grape-leaf-classifier
+   git clone https://github.com/sandanaraj/grape_leaf_disease_classification.git
+   cd grape_leaf_disease_classification
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
